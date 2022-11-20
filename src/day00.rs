@@ -51,11 +51,11 @@ mod tests {
 
     #[test]
     fn part1_works() {
-        assert_eq!(1 + 2 + 3, super::part1(&vec![1, 2, 3]));
+        assert_eq!(1 + 2 + 3, super::part1(&[1, 2, 3]));
     }
 
     #[test]
     fn part2_works() {
-        assert_eq!(2 + 4 + 6, super::part2(&vec![1, 2, 3]));
+        assert_eq!(2 + 4 + 6, super::part2(&[1, 2, 3]));
     }
 }
