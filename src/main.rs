@@ -46,8 +46,10 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     let (p1, p2) = match day {
         0 => day00::run(&input),
-        // TODO: Figure out what the magic syntax is here so that we don't have to return inside a match statement.
-        _ => return Err(Box::new(AocError::InvalidDay(raw_day))),
+        _ => {
+            let e: Box<dyn Error> = Box::new(AocError::InvalidDay(raw_day));
+            Err(e)
+        }
     }?;
 
     println!("== Day {} ==", day);
