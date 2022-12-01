@@ -19,6 +19,7 @@ use std::fmt::Display;
 use std::{env, fs};
 
 mod day00;
+mod day01;
 
 #[derive(Debug)]
 enum AocError {
@@ -46,6 +47,7 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     let (p1, p2) = match day {
         0 => day00::run(&input),
+        1 => day01::run(&input),
         _ => {
             let e: Box<dyn Error> = Box::new(AocError::InvalidDay(raw_day));
             Err(e)
