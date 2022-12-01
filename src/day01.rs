@@ -34,7 +34,9 @@ fn part1(vals: &[i32]) -> i32 {
 }
 
 fn part2(vals: &[i32]) -> i32 {
-    42
+    let mut mut_vals = vals.to_vec();
+    mut_vals.sort();
+    mut_vals[mut_vals.len()-3..].iter().sum()
 }
 
 pub fn run(input: &str) -> Result<(i32, i32), Box<dyn Error>> {
@@ -46,30 +48,30 @@ pub fn run(input: &str) -> Result<(i32, i32), Box<dyn Error>> {
 
 #[cfg(test)]
 mod tests {
+    const SAMPLE: &str = r#"1000
+    2000
+    3000
+    
+    4000
+    
+    5000
+    6000
+    
+    7000
+    8000
+    9000
+    
+    10000"#;
+
     #[test]
     fn part1_works() {
-        let input = super::parse(
-            r#"1000
-            2000
-            3000
-            
-            4000
-            
-            5000
-            6000
-            
-            7000
-            8000
-            9000
-            
-            10000"#,
-        )
-        .unwrap();
+        let input = super::parse(SAMPLE).unwrap();
         assert_eq!(24000, super::part1(&input));
     }
 
     #[test]
     fn part2_works() {
-        assert_eq!(42, super::part2(&[1, 2, 3]));
+        let input = super::parse(SAMPLE).unwrap();
+        assert_eq!(45000, super::part2(&input));
     }
 }
