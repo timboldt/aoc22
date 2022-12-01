@@ -14,64 +14,54 @@
 
 #![warn(clippy::all)]
 
-use regex::Regex;
 use std::error::Error;
+use std::fs;
 use std::num::ParseIntError;
 
 fn parse(input: &str) -> Result<Vec<i32>, ParseIntError> {
-    Regex::new(r"\n[ \t]*\n")
-        .unwrap()
-        .split(input)
-        .map(|elf| elf.split_whitespace().map(|s| s.parse::<i32>()).sum())
-        .collect()
+    input.lines().map(|s| s.parse()).collect()
 }
 
 fn part1(vals: &[i32]) -> i32 {
-    *vals
-        .iter()
-        .reduce(|accum, item| if *item > *accum { item } else { accum })
-        .unwrap_or(&0)
+    vals.iter().sum()
 }
 
 fn part2(vals: &[i32]) -> i32 {
-    let mut mut_vals = vals.to_vec();
-    mut_vals.sort();
-    mut_vals[mut_vals.len()-3..].iter().sum()
+    let subtot: i32 = vals.iter().sum();
+    subtot * 2
 }
 
-pub fn run(input: &str) -> Result<(i32, i32), Box<dyn Error>> {
-    let parsed = parse(input)?;
+fn main() -> Result<(), Box<dyn Error>> {
+    let input = fs::read_to_string(format!("input/00.txt"))?;
+    let parsed = parse(&input)?;
     let p1 = part1(&parsed);
     let p2 = part2(&parsed);
-    Ok((p1, p2))
+
+    println!("Part 1: {}", p1);
+    println!("Part 2: {}", p2);
+
+    Ok(())
 }
 
 #[cfg(test)]
 mod tests {
-    const SAMPLE: &str = r#"1000
-    2000
-    3000
-    
-    4000
-    
-    5000
-    6000
-    
-    7000
-    8000
-    9000
-    
-    10000"#;
+    #[test]
+    fn parse_works() {
+        assert_eq!(vec![-1, 0, 42], super::parse("-1\n0\n42").unwrap());
+    }
+
+    #[test]
+    fn parse_works_with_extra_lf() {
+        assert_eq!(vec![42], super::parse("42\n").unwrap());
+    }
 
     #[test]
     fn part1_works() {
-        let input = super::parse(SAMPLE).unwrap();
-        assert_eq!(24000, super::part1(&input));
+        assert_eq!(1 + 2 + 3, super::part1(&[1, 2, 3]));
     }
 
     #[test]
     fn part2_works() {
-        let input = super::parse(SAMPLE).unwrap();
-        assert_eq!(45000, super::part2(&input));
+        assert_eq!(2 + 4 + 6, super::part2(&[1, 2, 3]));
     }
 }
