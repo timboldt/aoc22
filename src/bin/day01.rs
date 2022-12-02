@@ -14,8 +14,8 @@
 
 #![warn(clippy::all)]
 
+use anyhow::Result;
 use regex::Regex;
-use std::error::Error;
 use std::fs;
 use std::num::ParseIntError;
 
@@ -40,7 +40,7 @@ fn part2(vals: &[i32]) -> i32 {
     mut_vals[mut_vals.len() - 3..].iter().sum()
 }
 
-fn main() -> Result<(), Box<dyn Error>> {
+fn main() -> Result<()> {
     let input = fs::read_to_string(format!("input/01.txt"))?;
     let parsed = parse(&input)?;
     let p1 = part1(&parsed);
