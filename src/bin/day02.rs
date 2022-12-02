@@ -17,7 +17,7 @@
 use anyhow::{anyhow, Result};
 use std::fs;
 
-#[derive(PartialEq)]
+#[derive(PartialEq, Clone, Copy)]
 enum Hand {
     Rock,
     Paper,
@@ -67,9 +67,29 @@ fn score(gr: &GameRound) -> i32 {
     }
 }
 
-// fn reinterpret_part2(gr: &GameRound) -> &GameRound {
-//     gr.clone()
-// }
+fn reinterpret_part2(gr: &GameRound) -> GameRound {
+    GameRound {
+        them: gr.them,
+        us: match gr.us {
+            Hand::Rock => match gr.them {
+                // We want to lose.
+                Hand::Rock => Hand::Scissors,
+                Hand::Paper => Hand::Rock,
+                Hand::Scissors => Hand::Paper,
+            },
+            Hand::Paper => match gr.them {
+                // We want to draw.
+                _ => gr.them,
+            },
+            Hand::Scissors => match gr.them {
+                // We want to win.
+                Hand::Rock => Hand::Paper,
+                Hand::Paper => Hand::Scissors,
+                Hand::Scissors => Hand::Rock,
+            },
+        },
+    }
+}
 
 fn parse(input: &str) -> Result<Vec<GameRound>> {
     input.lines().map(|s| parse_line(s)).collect()
@@ -84,7 +104,8 @@ fn part1(vals: &[GameRound]) -> i32 {
 
 fn part2(vals: &[GameRound]) -> i32 {
     vals.iter()
-        .map(|gr| score(gr))
+        .map(|gr| reinterpret_part2(gr))
+        .map(|gr| score(&gr))
         .reduce(|accum, item| accum + item)
         .unwrap_or_default()
 }
