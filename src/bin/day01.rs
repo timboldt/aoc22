@@ -41,7 +41,7 @@ fn part2(vals: &[i32]) -> i32 {
 }
 
 fn main() -> Result<()> {
-    let input = fs::read_to_string(format!("input/01.txt"))?;
+    let input = fs::read_to_string("input/01.txt")?;
     let parsed = parse(&input)?;
     let p1 = part1(&parsed);
     let p2 = part2(&parsed);
