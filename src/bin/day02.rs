@@ -51,16 +51,16 @@ fn score(gr: &GameRound) -> i32 {
     match gr.us {
         Hand::Rock => match gr.them {
             Hand::Rock => 1 + 3,
-            Hand::Paper => 1 + 0,
+            Hand::Paper => 1,
             Hand::Scissors => 1 + 6,
         },
         Hand::Paper => match gr.them {
             Hand::Rock => 2 + 6,
             Hand::Paper => 2 + 3,
-            Hand::Scissors => 2 + 0,
+            Hand::Scissors => 2,
         },
         Hand::Scissors => match gr.them {
-            Hand::Rock => 3 + 0,
+            Hand::Rock => 3,
             Hand::Paper => 3 + 6,
             Hand::Scissors => 3 + 3,
         },
@@ -77,10 +77,7 @@ fn reinterpret_part2(gr: &GameRound) -> GameRound {
                 Hand::Paper => Hand::Rock,
                 Hand::Scissors => Hand::Paper,
             },
-            Hand::Paper => match gr.them {
-                // We want to draw.
-                _ => gr.them,
-            },
+            Hand::Paper => gr.them,
             Hand::Scissors => match gr.them {
                 // We want to win.
                 Hand::Rock => Hand::Paper,
@@ -92,19 +89,19 @@ fn reinterpret_part2(gr: &GameRound) -> GameRound {
 }
 
 fn parse(input: &str) -> Result<Vec<GameRound>> {
-    input.lines().map(|s| parse_line(s)).collect()
+    input.lines().map(parse_line).collect()
 }
 
 fn part1(vals: &[GameRound]) -> i32 {
     vals.iter()
-        .map(|gr| score(gr))
+        .map(score)
         .reduce(|accum, item| accum + item)
         .unwrap_or_default()
 }
 
 fn part2(vals: &[GameRound]) -> i32 {
     vals.iter()
-        .map(|gr| reinterpret_part2(gr))
+        .map(reinterpret_part2)
         .map(|gr| score(&gr))
         .reduce(|accum, item| accum + item)
         .unwrap_or_default()
