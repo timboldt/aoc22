@@ -54,20 +54,20 @@ fn main() -> Result<()> {
 
 #[cfg(test)]
 mod tests {
-    const SAMPLE: &str = r#"1000
-    2000
-    3000
-    
-    4000
-    
-    5000
-    6000
-    
-    7000
-    8000
-    9000
-    
-    10000"#;
+    const SAMPLE: &str = r"1000
+2000
+3000
+
+4000
+
+5000
+6000
+
+7000
+8000
+9000
+
+10000";
 
     #[test]
     fn part1_works() {

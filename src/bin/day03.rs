@@ -20,7 +20,6 @@ use std::collections::HashSet;
 use std::fs;
 
 fn split_rucksack(s: &str) -> (String, String) {
-    let s = s.trim();
     let s1 = s[0..s.len() / 2].to_owned();
     let s2 = s[(s.len() / 2)..].to_owned();
     println!("{}/{}", s1, s2);
@@ -65,7 +64,7 @@ fn part1(vals: &[(String, String)]) -> i32 {
 fn parse2(input: &str) -> Vec<(String, String, String)> {
     let mut result: Vec<(String, String, String)> = vec![];
     for chunk in &input.lines().chunks(3) {
-        let (x, y, z) = chunk.map(|s| s.trim()).collect_tuple().unwrap();
+        let (x, y, z) = chunk.collect_tuple().unwrap();
         result.push((x.to_owned(), y.to_owned(), z.to_owned()));
     }
     result
@@ -93,11 +92,11 @@ fn main() -> Result<()> {
 #[cfg(test)]
 mod tests {
     const SAMPLE: &str = r#"vJrwpWtwJgWrhcsFMMfFFhFp
-    jqHRNqRjqzjGDLGLrsFMfFZSrLrFZsSL
-    PmmdzqPrVvPwwTWBwg
-    wMqvLMZHhHMvwLHjbvcjnnSBnvTQFn
-    ttgJtRGJQctTZtZT
-    CrZsJsPPZsGzwwsLwLmpwMDw"#;
+jqHRNqRjqzjGDLGLrsFMfFZSrLrFZsSL
+PmmdzqPrVvPwwTWBwg
+wMqvLMZHhHMvwLHjbvcjnnSBnvTQFn
+ttgJtRGJQctTZtZT
+CrZsJsPPZsGzwwsLwLmpwMDw"#;
 
     #[test]
     fn part1_works() {

@@ -122,8 +122,8 @@ fn main() -> Result<()> {
 #[cfg(test)]
 mod tests {
     const SAMPLE: &str = r#"A Y
-    B X
-    C Z"#;
+B X
+C Z"#;
 
     #[test]
     fn part1_works() {
