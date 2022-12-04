@@ -15,7 +15,6 @@
 #![warn(clippy::all)]
 
 use anyhow::{anyhow, Result};
-use std::fs;
 
 #[derive(PartialEq, Clone, Copy)]
 enum Hand {
@@ -108,7 +107,7 @@ fn part2(vals: &[GameRound]) -> i32 {
 }
 
 fn main() -> Result<()> {
-    let input = fs::read_to_string("input/02.txt")?;
+    let input = include_str!("../../input/02.txt");
     let parsed = parse(&input)?;
     let p1 = part1(&parsed);
     let p2 = part2(&parsed);

@@ -17,7 +17,6 @@
 use anyhow::Result;
 use itertools::Itertools;
 use std::collections::HashSet;
-use std::fs;
 
 fn split_rucksack(s: &str) -> (String, String) {
     let s1 = s[0..s.len() / 2].to_owned();
@@ -76,7 +75,7 @@ fn part2(vals: &[(String, String, String)]) -> i32 {
 }
 
 fn main() -> Result<()> {
-    let input = fs::read_to_string("input/03.txt")?;
+    let input = include_str!("../../input/03.txt");
     let parsed = parse1(&input);
     let p1 = part1(&parsed);
     let parsed = parse2(&input);

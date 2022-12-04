@@ -16,7 +16,6 @@
 
 use anyhow::Result;
 use regex::Regex;
-use std::fs;
 use std::num::ParseIntError;
 
 fn parse(input: &str) -> Result<Vec<i32>, ParseIntError> {
@@ -41,7 +40,7 @@ fn part2(vals: &[i32]) -> i32 {
 }
 
 fn main() -> Result<()> {
-    let input = fs::read_to_string("input/01.txt")?;
+    let input = include_str!("../../input/01.txt");
     let parsed = parse(&input)?;
     let p1 = part1(&parsed);
     let p2 = part2(&parsed);

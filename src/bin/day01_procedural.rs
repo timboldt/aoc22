@@ -14,8 +14,6 @@
 
 #![warn(clippy::all)]
 
-use std::fs;
-
 fn parse(input: &str) -> Vec<i32> {
     let mut result = vec![];
     let mut sum = 0;
@@ -61,7 +59,7 @@ fn part2(vals: &[i32]) -> i32 {
 }
 
 fn main() {
-    let input = fs::read_to_string("input/01.txt").unwrap();
+    let input = include_str!("../../input/01.txt");
     let parsed = parse(&input);
     let p1 = part1(&parsed);
     let p2 = part2(&parsed);
