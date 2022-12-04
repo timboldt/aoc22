@@ -14,6 +14,8 @@
 
 #![warn(clippy::all)]
 
+use std::time::Instant;
+
 fn parse(input: &str) -> Vec<i32> {
     let mut result = vec![];
     let mut sum = 0;
@@ -61,11 +63,14 @@ fn part2(vals: &[i32]) -> i32 {
 fn main() {
     let input = include_str!("../../input/01.txt");
     let parsed = parse(&input);
-    let p1 = part1(&parsed);
-    let p2 = part2(&parsed);
 
-    println!("Part 1: {}", p1);
-    println!("Part 2: {}", p2);
+    let timer = Instant::now();
+    let p1 = part1(&parsed);
+    println!("Part 1: {}\n(elapsed: {:.2?})", p1, timer.elapsed());
+
+    let timer = Instant::now();
+    let p2 = part2(&parsed);
+    println!("Part 2: {}\n(elapsed: {:.2?})", p2, timer.elapsed());
 }
 
 #[cfg(test)]

@@ -17,6 +17,7 @@
 use anyhow::Result;
 use regex::Regex;
 use std::num::ParseIntError;
+use std::time::Instant;
 
 fn parse(input: &str) -> Result<Vec<i32>, ParseIntError> {
     Regex::new(r"\n[ \t]*\n")
@@ -42,11 +43,14 @@ fn part2(vals: &[i32]) -> i32 {
 fn main() -> Result<()> {
     let input = include_str!("../../input/01.txt");
     let parsed = parse(&input)?;
-    let p1 = part1(&parsed);
-    let p2 = part2(&parsed);
 
-    println!("Part 1: {}", p1);
-    println!("Part 2: {}", p2);
+    let timer = Instant::now();
+    let p1 = part1(&parsed);
+    println!("Part 1: {}\n(elapsed: {:.2?})", p1, timer.elapsed());
+
+    let timer = Instant::now();
+    let p2 = part2(&parsed);
+    println!("Part 2: {}\n(elapsed: {:.2?})", p2, timer.elapsed());
 
     Ok(())
 }

@@ -17,6 +17,7 @@
 use anyhow::Result;
 use itertools::Itertools;
 use std::collections::HashSet;
+use std::time::Instant;
 
 fn split_rucksack(s: &str) -> (String, String) {
     let s1 = s[0..s.len() / 2].to_owned();
@@ -76,13 +77,18 @@ fn part2(vals: &[(String, String, String)]) -> i32 {
 
 fn main() -> Result<()> {
     let input = include_str!("../../input/03.txt");
-    let parsed = parse1(&input);
-    let p1 = part1(&parsed);
-    let parsed = parse2(&input);
-    let p2 = part2(&parsed);
 
-    println!("Part 1: {}", p1);
-    println!("Part 2: {}", p2);
+    let parsed = parse1(&input);
+
+    let timer = Instant::now();
+    let p1 = part1(&parsed);
+    println!("Part 1: {}\n(elapsed: {:.2?})", p1, timer.elapsed());
+
+    let parsed = parse2(&input);
+
+    let timer = Instant::now();
+    let p2 = part2(&parsed);
+    println!("Part 2: {}\n(elapsed: {:.2?})", p2, timer.elapsed());
 
     Ok(())
 }

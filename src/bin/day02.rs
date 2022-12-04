@@ -15,6 +15,7 @@
 #![warn(clippy::all)]
 
 use anyhow::{anyhow, Result};
+use std::time::Instant;
 
 #[derive(PartialEq, Clone, Copy)]
 enum Hand {
@@ -108,12 +109,16 @@ fn part2(vals: &[GameRound]) -> i32 {
 
 fn main() -> Result<()> {
     let input = include_str!("../../input/02.txt");
-    let parsed = parse(&input)?;
-    let p1 = part1(&parsed);
-    let p2 = part2(&parsed);
 
-    println!("Part 1: {}", p1);
-    println!("Part 2: {}", p2);
+    let parsed = parse(&input)?;
+
+    let timer = Instant::now();
+    let p1 = part1(&parsed);
+    println!("Part 1: {}\n(elapsed: {:.2?})", p1, timer.elapsed());
+
+    let timer = Instant::now();
+    let p2 = part2(&parsed);
+    println!("Part 2: {}\n(elapsed: {:.2?})", p2, timer.elapsed());
 
     Ok(())
 }
