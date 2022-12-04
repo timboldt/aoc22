@@ -16,22 +16,29 @@
 
 use std::time::Instant;
 
-struct Assignment(i32, i32);
-
-fn parse_assignment(s: &str) -> Assignment {
-    let mut iter = s.split('-');
-    Assignment(
-        iter.next().unwrap().parse::<i32>().unwrap(),
-        iter.next().unwrap().parse::<i32>().unwrap(),
-    )
+struct Assignment {
+    low: i32,
+    high: i32,
 }
 
-fn contained_within(a1: &Assignment, a2: &Assignment) -> bool {
-    a1.0 <= a2.0 && a1.1 >= a2.1
-}
+impl Assignment {
+    fn parse(s: &str) -> Self {
+        let mut iter = s.split('-');
+        Assignment{
+            low: iter.next().unwrap().parse::<i32>().unwrap(),
+            high: iter.next().unwrap().parse::<i32>().unwrap(),
+        }
+    }
+    
+    fn contained_within(&self, other: &Assignment) -> bool {
+        self.low <= other.low && self.high >= other.high
+    }
 
-fn overlapping(a1: &Assignment, a2: &Assignment) -> bool {
-    (a1.0 >= a2.0 && a1.0 <= a2.1) || (a1.1 >= a2.0 && a1.1 <= a2.1) || (a1.0 < a2.0 && a1.1 > a2.1)
+    fn overlapping(&self, other: &Assignment) -> bool {
+        (self.low >= other.low && self.low <= other.high)
+            || (self.high >= other.low && self.high <= other.high)
+            || (self.low < other.low && self.high > other.high)
+    }
 }
 
 fn parse(input: &str) -> Vec<(Assignment, Assignment)> {
@@ -39,27 +46,29 @@ fn parse(input: &str) -> Vec<(Assignment, Assignment)> {
     for line in input.lines() {
         let mut iter = line.split(',');
         result.push((
-            parse_assignment(iter.next().unwrap()),
-            parse_assignment(iter.next().unwrap()),
+            Assignment::parse(iter.next().unwrap()),
+            Assignment::parse(iter.next().unwrap()),
         ));
     }
     result
 }
 
-fn part1(vals: &[(Assignment, Assignment)]) -> i32 {
+fn part1(pairs: &[(Assignment, Assignment)]) -> i32 {
     let mut result = 0;
-    for v in vals {
-        if contained_within(&v.0, &v.1) || contained_within(&v.1, &v.0) {
+    for pair in pairs {
+        let (first, second) = pair;
+        if first.contained_within(&second) || second.contained_within(&first) {
             result += 1;
         }
     }
     result
 }
 
-fn part2(vals: &[(Assignment, Assignment)]) -> i32 {
+fn part2(pairs: &[(Assignment, Assignment)]) -> i32 {
     let mut result = 0;
-    for v in vals {
-        if overlapping(&v.0, &v.1) {
+    for pair in pairs {
+        let (first, second) = pair;
+        if first.overlapping(&second) {
             result += 1;
         }
     }
