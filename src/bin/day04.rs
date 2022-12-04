@@ -30,6 +30,10 @@ fn contained_within(a1: &Assignment, a2: &Assignment) -> bool {
     a1.0 <= a2.0 && a1.1 >= a2.1
 }
 
+fn overlapping(a1: &Assignment, a2: &Assignment) -> bool {
+    (a1.0 >= a2.0 && a1.0 <= a2.1) || (a1.1 >= a2.0 && a1.1 <= a2.1) || (a1.0 < a2.0 && a1.1 > a2.1)
+}
+
 fn parse(input: &str) -> Vec<(Assignment, Assignment)> {
     let mut result = vec![];
     for line in input.lines() {
@@ -54,6 +58,11 @@ fn part1(vals: &[(Assignment, Assignment)]) -> i32 {
 
 fn part2(vals: &[(Assignment, Assignment)]) -> i32 {
     let mut result = 0;
+    for v in vals {
+        if overlapping(&v.0, &v.1) {
+            result += 1;
+        }
+    }
     result
 }
 
@@ -88,6 +97,6 @@ mod tests {
     #[test]
     fn part2_works() {
         let input = super::parse(SAMPLE);
-        assert_eq!(45000, super::part2(&input));
+        assert_eq!(4, super::part2(&input));
     }
 }
