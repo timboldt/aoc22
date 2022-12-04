@@ -22,7 +22,6 @@ use std::fs;
 fn split_rucksack(s: &str) -> (String, String) {
     let s1 = s[0..s.len() / 2].to_owned();
     let s2 = s[(s.len() / 2)..].to_owned();
-    println!("{}/{}", s1, s2);
     (s1, s2)
 }
 
