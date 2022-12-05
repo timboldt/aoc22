@@ -110,7 +110,7 @@ fn part2(vals: &[GameRound]) -> i32 {
 fn main() -> Result<()> {
     let input = include_str!("../../input/02.txt");
 
-    let parsed = parse(&input)?;
+    let parsed = parse(input)?;
 
     let timer = Instant::now();
     let p1 = part1(&parsed);

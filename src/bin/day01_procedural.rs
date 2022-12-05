@@ -47,9 +47,7 @@ fn part2(vals: &[i32]) -> i32 {
         let mut v = *v;
         for t in top.iter_mut() {
             if v > *t {
-                let tmp = *t;
-                *t = v;
-                v = tmp;
+                std::mem::swap(&mut (*t), &mut v);
             }
         }
     }
@@ -62,7 +60,7 @@ fn part2(vals: &[i32]) -> i32 {
 
 fn main() {
     let input = include_str!("../../input/01.txt");
-    let parsed = parse(&input);
+    let parsed = parse(input);
 
     let timer = Instant::now();
     let p1 = part1(&parsed);

@@ -57,7 +57,7 @@ fn part1(pairs: &[(Assignment, Assignment)]) -> i32 {
     let mut result = 0;
     for pair in pairs {
         let (first, second) = pair;
-        if first.contained_within(&second) || second.contained_within(&first) {
+        if first.contained_within(second) || second.contained_within(first) {
             result += 1;
         }
     }
@@ -68,7 +68,7 @@ fn part2(pairs: &[(Assignment, Assignment)]) -> i32 {
     let mut result = 0;
     for pair in pairs {
         let (first, second) = pair;
-        if first.overlapping(&second) {
+        if first.overlapping(second) {
             result += 1;
         }
     }
@@ -77,7 +77,7 @@ fn part2(pairs: &[(Assignment, Assignment)]) -> i32 {
 
 fn main() {
     let input = include_str!("../../input/04.txt");
-    let parsed = parse(&input);
+    let parsed = parse(input);
 
     let timer = Instant::now();
     let p1 = part1(&parsed);

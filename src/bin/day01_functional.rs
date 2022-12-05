@@ -42,7 +42,7 @@ fn part2(vals: &[i32]) -> i32 {
 
 fn main() -> Result<()> {
     let input = include_str!("../../input/01.txt");
-    let parsed = parse(&input)?;
+    let parsed = parse(input)?;
 
     let timer = Instant::now();
     let p1 = part1(&parsed);
