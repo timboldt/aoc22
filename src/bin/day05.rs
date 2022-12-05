@@ -96,8 +96,27 @@ fn part1(puzzle: &Puzzle) -> String {
     result.iter().collect()
 }
 
-fn part2(_puzzle: &Puzzle) -> String {
-    vec!['C', 'M', 'K'].iter().collect()
+fn part2(puzzle: &Puzzle) -> String {
+    let mut puzzle = (*puzzle).clone();
+
+    for command in &puzzle.commands {
+        let mut tmp = vec![];
+        // HORRIBLE hack!
+        for _ in 0..command.quantity {
+            let c = puzzle.stacks[command.from - 1].pop().unwrap();
+            tmp.push(c);
+        }
+        for _ in 0..command.quantity {
+            let c = tmp.pop().unwrap();
+            puzzle.stacks[command.to - 1].push(c);
+        }
+    }
+
+    let mut result = vec![];
+    for stack in puzzle.stacks {
+        result.push(*stack.last().unwrap());
+    }
+    result.iter().collect()
 }
 
 fn main() {
