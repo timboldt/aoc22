@@ -24,12 +24,12 @@ struct Assignment {
 impl Assignment {
     fn parse(s: &str) -> Self {
         let mut iter = s.split('-');
-        Assignment{
+        Assignment {
             low: iter.next().unwrap().parse::<i32>().unwrap(),
             high: iter.next().unwrap().parse::<i32>().unwrap(),
         }
     }
-    
+
     fn contained_within(&self, other: &Assignment) -> bool {
         self.low <= other.low && self.high >= other.high
     }
