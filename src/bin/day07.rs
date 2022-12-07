@@ -24,7 +24,7 @@ fn propagate(cwd: &Vec<String>, cwd_size: usize, dir_sizes: &mut HashMap<String,
         dir_sizes.insert(key.clone(), cwd_size);
     }
     for part in cwd {
-        key = key + "/" + &part;
+        key = key + "/" + part;
         if dir_sizes.contains_key(&key) {
             *dir_sizes.get_mut(&key).unwrap() += cwd_size;
         } else {
@@ -38,7 +38,7 @@ fn parse(input: &str) -> HashMap<String, usize> {
     let mut cwd: Vec<String> = vec![];
     let mut cwd_size: usize = 0;
     for line in input.lines() {
-        match line.chars().nth(0).unwrap() {
+        match line.chars().next().unwrap() {
             '$' => {
                 propagate(&cwd, cwd_size, &mut dir_sizes);
                 cwd_size = 0;
@@ -61,7 +61,7 @@ fn parse(input: &str) -> HashMap<String, usize> {
             '0'..='9' => {
                 cwd_size += line
                     .split_whitespace()
-                    .nth(0)
+                    .next()
                     .unwrap()
                     .parse::<usize>()
                     .unwrap();
