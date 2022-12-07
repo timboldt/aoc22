@@ -17,7 +17,12 @@
 use std::{collections::HashMap, time::Instant};
 
 fn propagate(cwd: &Vec<String>, cwd_size: usize, dir_sizes: &mut HashMap<String, usize>) {
-    let mut key = String::new();
+    let mut key: String = "/".into();
+    if dir_sizes.contains_key(&key) {
+        *dir_sizes.get_mut(&key).unwrap() += cwd_size;
+    } else {
+        dir_sizes.insert(key.clone(), cwd_size);
+    }
     for part in cwd {
         key = key + "/" + &part;
         if dir_sizes.contains_key(&key) {
@@ -72,8 +77,16 @@ fn part1(puzzle: &HashMap<String, usize>) -> usize {
     puzzle.values().filter(|v| **v <= 100000).sum()
 }
 
-fn part2(_puzzle: &HashMap<String, usize>) -> usize {
-    0
+fn part2(puzzle: &HashMap<String, usize>) -> usize {
+    const FS_SIZE: usize = 70000000;
+    const UPGD_SIZE: usize = 30000000;
+    let fs_used = puzzle.get("/").unwrap();
+    let space_needed = UPGD_SIZE - (FS_SIZE - fs_used);
+    *puzzle
+        .values()
+        .filter(|v| **v >= space_needed)
+        .reduce(|accum, v| if v < accum { v } else { accum })
+        .unwrap()
 }
 
 fn main() {
@@ -125,6 +138,6 @@ $ ls
     #[test]
     fn part2_works() {
         let input = super::parse(SAMPLE);
-        assert_eq!(19, super::part2(&input));
+        assert_eq!(24933642, super::part2(&input));
     }
 }
