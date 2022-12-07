@@ -24,7 +24,8 @@ use core::panic::PanicInfo;
 
 #[cfg(not(test))]
 #[panic_handler]
-fn panic(_panic: &PanicInfo<'_>) -> ! {
+fn panic(panic: &PanicInfo<'_>) -> ! {
+    println!("Panic! {:?}", panic);
     loop {}
 }
 
