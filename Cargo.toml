@@ -9,4 +9,11 @@ edition = "2021"
 anyhow = "1.0.66"
 itertools = "0.10.5"
 lazy_static = "1.4.0"
+libc-print = "0.1.20"
 regex = "1.7.0"
+
+[profile.dev]
+panic = "abort"
+
+[profile.release]
+panic = "abort"
