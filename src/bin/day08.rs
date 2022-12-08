@@ -69,6 +69,44 @@ fn is_visible(puzzle: &Vec<Vec<u8>>, row: usize, col: usize) -> bool {
     false
 }
 
+fn viewing_score(puzzle: &Vec<Vec<u8>>, row: usize, col: usize) -> usize {
+    let target = puzzle[row][col];
+
+    let mut left = 0;
+    for r in (0..row).rev() {
+        left += 1;
+        if puzzle[r][col] >= target {
+            break;
+        }
+    }
+
+    let mut right = 0;
+    for r in row + 1..puzzle.len() {
+        right += 1;
+        if puzzle[r][col] >= target {
+            break;
+        }
+    }
+
+    let mut top = 0;
+    for c in (0..col).rev() {
+        top += 1;
+        if puzzle[row][c] >= target {
+            break;
+        }
+    }
+
+    let mut bottom = 0;
+    for c in col + 1..puzzle[row].len() {
+        bottom += 1;
+        if puzzle[row][c] >= target {
+            break;
+        }
+    }
+
+    left * right * top * bottom
+}
+
 fn parse(input: &str) -> Vec<Vec<u8>> {
     let mut forest: Vec<Vec<u8>> = Vec::new();
     for line in input.lines() {
@@ -89,7 +127,6 @@ fn part1(puzzle: &Vec<Vec<u8>>) -> usize {
         for col in 0..cols {
             if is_visible(puzzle, row, col) {
                 visible += 1;
-            } else {
             }
         }
     }
@@ -97,7 +134,18 @@ fn part1(puzzle: &Vec<Vec<u8>>) -> usize {
 }
 
 fn part2(puzzle: &Vec<Vec<u8>>) -> usize {
-    42
+    let rows = puzzle.len();
+    let cols = puzzle[0].len();
+    let mut best: usize = 0;
+    for row in 0..rows {
+        for col in 0..cols {
+            let score = viewing_score(puzzle, row, col);
+            if score > best {
+                best = score;
+            }
+        }
+    }
+    best
 }
 
 fn main() {
@@ -130,6 +178,6 @@ mod tests {
     #[test]
     fn part2_works() {
         let input = super::parse(SAMPLE);
-        assert_eq!(24933642, super::part2(&input));
+        assert_eq!(8, super::part2(&input));
     }
 }
