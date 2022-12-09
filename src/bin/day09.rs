@@ -14,7 +14,7 @@
 
 #![warn(clippy::all)]
 
-use std::{time::Instant, collections::HashSet};
+use std::{collections::HashSet, time::Instant};
 
 enum Step {
     Left(u8),
@@ -76,41 +76,82 @@ fn part1(steps: &[Step]) -> usize {
     for step in steps {
         match step {
             Step::Left(distance) => {
-                for i in 0..*distance {
+                for _ in 0..*distance {
                     head = Point(head.0 - 1, head.1);
                     tail = follow_head(head, tail);
                     visited.insert(tail);
                 }
             }
             Step::Right(distance) => {
-                for i in 0..*distance {
+                for _ in 0..*distance {
                     head = Point(head.0 + 1, head.1);
                     tail = follow_head(head, tail);
                     visited.insert(tail);
                 }
             }
             Step::Up(distance) => {
-                for i in 0..*distance {
+                for _ in 0..*distance {
                     head = Point(head.0, head.1 + 1);
                     tail = follow_head(head, tail);
                     visited.insert(tail);
                 }
             }
             Step::Down(distance) => {
-                for i in 0..*distance {
+                for _ in 0..*distance {
                     head = Point(head.0, head.1 - 1);
                     tail = follow_head(head, tail);
                     visited.insert(tail);
                 }
             }
         }
-        println!("{:?} {:?}", head, tail);
     }
     visited.len()
 }
 
-fn part2(_steps: &[Step]) -> usize {
-    42
+fn part2(steps: &[Step]) -> usize {
+    let mut knots = [Point(0, 0); 10];
+    let mut visited = HashSet::new();
+    for step in steps {
+        match step {
+            Step::Left(distance) => {
+                for _ in 0..*distance {
+                    knots[0] = Point(knots[0].0 - 1, knots[0].1);
+                    for k in 1..=9 {
+                        knots[k] = follow_head(knots[k - 1], knots[k]);
+                    }
+                    visited.insert(knots[9]);
+                }
+            }
+            Step::Right(distance) => {
+                for _ in 0..*distance {
+                    knots[0] = Point(knots[0].0 + 1, knots[0].1);
+                    for k in 1..=9 {
+                        knots[k] = follow_head(knots[k - 1], knots[k]);
+                    }
+                    visited.insert(knots[9]);
+                }
+            }
+            Step::Up(distance) => {
+                for _ in 0..*distance {
+                    knots[0] = Point(knots[0].0, knots[0].1 + 1);
+                    for k in 1..=9 {
+                        knots[k] = follow_head(knots[k - 1], knots[k]);
+                    }
+                    visited.insert(knots[9]);
+                }
+            }
+            Step::Down(distance) => {
+                for _ in 0..*distance {
+                    knots[0] = Point(knots[0].0, knots[0].1 - 1);
+                    for k in 1..=9 {
+                        knots[k] = follow_head(knots[k - 1], knots[k]);
+                    }
+                    visited.insert(knots[9]);
+                }
+            }
+        }
+    }
+    visited.len()
 }
 
 fn main() {
@@ -137,6 +178,15 @@ D 1
 L 5
 R 2";
 
+    const SAMPLE2: &str = r"R 5
+U 8
+L 8
+D 3
+R 17
+D 10
+L 25
+U 20";
+
     #[test]
     fn part1_works() {
         let input = super::parse(SAMPLE);
@@ -145,7 +195,7 @@ R 2";
 
     #[test]
     fn part2_works() {
-        let input = super::parse(SAMPLE);
-        assert_eq!(8, super::part2(&input));
+        let input = super::parse(SAMPLE2);
+        assert_eq!(36, super::part2(&input));
     }
 }
