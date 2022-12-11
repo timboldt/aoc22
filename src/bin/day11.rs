@@ -69,13 +69,12 @@ fn parse(input: &str) -> Vec<Monkey> {
             if_false: cap[7].parse().unwrap(),
         });
     }
-    println!("{:?}", monkeys);
     monkeys
 }
 
 fn part1(monkeys: &[Monkey]) -> usize {
     let mut monkeys = monkeys.iter().cloned().collect_vec();
-    for round in 0..20 {
+    for _ in 0..20 {
         for m in 0..monkeys.len() {
             while let Some(w) = monkeys[m].items.pop() {
                 let worry = match monkeys[m].op {
@@ -92,15 +91,36 @@ fn part1(monkeys: &[Monkey]) -> usize {
                 monkeys[m].num_inspections += 1;
             }
         }
-        println!("\n\nRound {}: {:?}", round, monkeys);
     }
     // Reverse sort.
     monkeys.sort_by(|b, a| a.num_inspections.cmp(&b.num_inspections));
     monkeys.iter().take(2).map(|m| m.num_inspections).product()
 }
 
-fn part2(_monkeys: &[Monkey]) -> i32 {
-    0
+fn part2(monkeys: &[Monkey]) -> usize {
+    let mut monkeys = monkeys.iter().cloned().collect_vec();
+    let modulus: usize = monkeys.iter().map(|m| m.modulus).product();
+    for _ in 0..10000 {
+        for m in 0..monkeys.len() {
+            while let Some(w) = monkeys[m].items.pop() {
+                let worry = match monkeys[m].op {
+                    MonkeyOp::Plus(x) => w + x,
+                    MonkeyOp::Times(x) => w * x,
+                    MonkeyOp::Square => w * w,
+                };
+                let target = if worry % monkeys[m].modulus == 0 {
+                    monkeys[m].if_true
+                } else {
+                    monkeys[m].if_false
+                };
+                monkeys[target].items.push(worry % modulus);
+                monkeys[m].num_inspections += 1;
+            }
+        }
+    }
+    // Reverse sort.
+    monkeys.sort_by(|b, a| a.num_inspections.cmp(&b.num_inspections));
+    monkeys.iter().take(2).map(|m| m.num_inspections).product()
 }
 
 fn main() {
@@ -156,6 +176,6 @@ Monkey 3:
     #[test]
     fn part2_works() {
         let input = super::parse(SAMPLE);
-        assert_eq!(36, super::part2(&input));
+        assert_eq!(2713310158, super::part2(&input));
     }
 }
