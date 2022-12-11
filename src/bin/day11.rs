@@ -21,12 +21,16 @@ use std::time::Instant;
 fn parse(input: &str) -> Vec<i32> {
     lazy_static! {
         static ref RE: Regex = Regex::new(
-    r"(?ms)Monkey\s*(\d+).*$\s*Starting items:\s*(.*)$.*Operation: new = old (.) (.+)$.*Test: divisible by (\d+)$.*If true: throw to monkey (\d+)$.*If false: throw to monkey (\d+)$"
+            r"(?ms)Monkey\s*(\d+).*$
+\s*Starting items:\s*(.*)$
+\s*Operation: new = old (.) (.+)$
+\s*Test: divisible by (\d+)$
+\s*If true: throw to monkey (\d+)$
+\s*If false: throw to monkey (\d+)$"
         )
         .unwrap();
     }
     for entry in input.split("\n\n") {
-        println!("{}", entry);
         let cap = RE.captures(entry).unwrap();
         println!(
             "M:{} S:{} O:{}{} D:{} MT:{} MF:{}",
@@ -47,7 +51,7 @@ fn part2(parsed: &[i32]) -> i32 {
 }
 
 fn main() {
-    let input = include_str!("../../input/10.txt");
+    let input = include_str!("../../input/11.txt");
     let parsed = parse(input);
 
     let timer = Instant::now();
