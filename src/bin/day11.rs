@@ -14,11 +14,29 @@
 
 #![warn(clippy::all)]
 
+use itertools::Itertools;
 use lazy_static::lazy_static;
 use regex::Regex;
 use std::time::Instant;
 
-fn parse(input: &str) -> Vec<i32> {
+#[derive(Debug, Clone)]
+struct Monkey {
+    num_inspections: usize,
+    items: Vec<usize>,
+    op: MonkeyOp,
+    modulus: usize,
+    if_true: usize,
+    if_false: usize,
+}
+
+#[derive(Debug, Clone, Copy)]
+enum MonkeyOp {
+    Plus(usize),
+    Times(usize),
+    Square,
+}
+
+fn parse(input: &str) -> Vec<Monkey> {
     lazy_static! {
         static ref RE: Regex = Regex::new(
             r"(?ms)Monkey\s*(\d+).*$
@@ -30,23 +48,58 @@ fn parse(input: &str) -> Vec<i32> {
         )
         .unwrap();
     }
+
+    let mut monkeys: Vec<Monkey> = Vec::new();
     for entry in input.split("\n\n") {
         let cap = RE.captures(entry).unwrap();
-        println!(
-            "M:{} S:{} O:{}{} D:{} MT:{} MF:{}",
-            &cap[1], &cap[2], &cap[3], &cap[4], &cap[5], &cap[6], &cap[7]
-        );
+        monkeys.push(Monkey {
+            num_inspections: 0,
+            items: cap[2]
+                .split(',')
+                .map(|s| s.trim().parse().unwrap())
+                .collect(),
+            op: match (&cap[3], &cap[4]) {
+                ("+", v) => MonkeyOp::Plus(v.trim().parse().unwrap()),
+                ("*", "old") => MonkeyOp::Square,
+                ("*", v) => MonkeyOp::Times(v.trim().parse().unwrap()),
+                _ => unreachable!(),
+            },
+            modulus: cap[5].parse().unwrap(),
+            if_true: cap[6].parse().unwrap(),
+            if_false: cap[7].parse().unwrap(),
+        });
     }
-
-    let mut result: Vec<i32> = Vec::new();
-    result
+    println!("{:?}", monkeys);
+    monkeys
 }
 
-fn part1(parsed: &[i32]) -> i32 {
-    42
+fn part1(monkeys: &[Monkey]) -> usize {
+    let mut monkeys = monkeys.iter().cloned().collect_vec();
+    for round in 0..20 {
+        for m in 0..monkeys.len() {
+            while let Some(w) = monkeys[m].items.pop() {
+                let worry = match monkeys[m].op {
+                    MonkeyOp::Plus(x) => w + x,
+                    MonkeyOp::Times(x) => w * x,
+                    MonkeyOp::Square => w * w,
+                } / 3;
+                let target = if worry % monkeys[m].modulus == 0 {
+                    monkeys[m].if_true
+                } else {
+                    monkeys[m].if_false
+                };
+                monkeys[target].items.push(worry);
+                monkeys[m].num_inspections += 1;
+            }
+        }
+        println!("\n\nRound {}: {:?}", round, monkeys);
+    }
+    // Reverse sort.
+    monkeys.sort_by(|b, a| a.num_inspections.cmp(&b.num_inspections));
+    monkeys.iter().take(2).map(|m| m.num_inspections).product()
 }
 
-fn part2(parsed: &[i32]) -> i32 {
+fn part2(_monkeys: &[Monkey]) -> i32 {
     0
 }
 
@@ -97,7 +150,7 @@ Monkey 3:
     #[test]
     fn part1_works() {
         let input = super::parse(SAMPLE);
-        assert_eq!(13140, super::part1(&input));
+        assert_eq!(10605, super::part1(&input));
     }
 
     #[test]
