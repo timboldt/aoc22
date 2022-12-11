@@ -52,9 +52,8 @@ fn part1(ops: &[Op]) -> i32 {
                 result += signal * cycles;
             }
         }
-        match *op {
-            Op::AddX(s) => signal += s,
-            _ => {}
+        if let Op::AddX(s) = *op {
+            signal += s;
         }
         if cycles >= 220 {
             break;
@@ -79,9 +78,8 @@ fn part2(ops: &[Op]) -> i32 {
             }
             cycles += 1;
         }
-        match *op {
-            Op::AddX(s) => signal += s,
-            _ => {}
+        if let Op::AddX(s) = *op {
+            signal += s;
         }
     }
     println!();

@@ -27,8 +27,8 @@ fn is_visible(puzzle: &Vec<Vec<u8>>, row: usize, col: usize) -> bool {
     let mut visible;
 
     visible = true;
-    for r in 0..row {
-        if puzzle[r][col] >= target {
+    for p_row in puzzle.iter().take(row) {
+        if p_row[col] >= target {
             visible = false;
         }
     }
@@ -37,8 +37,8 @@ fn is_visible(puzzle: &Vec<Vec<u8>>, row: usize, col: usize) -> bool {
     }
 
     visible = true;
-    for r in row + 1..puzzle.len() {
-        if puzzle[r][col] >= target {
+    for p_row in puzzle.iter().skip(row+1) {
+        if p_row[col] >= target {
             visible = false;
         }
     }
@@ -69,7 +69,7 @@ fn is_visible(puzzle: &Vec<Vec<u8>>, row: usize, col: usize) -> bool {
     false
 }
 
-fn viewing_score(puzzle: &Vec<Vec<u8>>, row: usize, col: usize) -> usize {
+fn viewing_score(puzzle: &[Vec<u8>], row: usize, col: usize) -> usize {
     let target = puzzle[row][col];
 
     let mut left = 0;
@@ -81,9 +81,9 @@ fn viewing_score(puzzle: &Vec<Vec<u8>>, row: usize, col: usize) -> usize {
     }
 
     let mut right = 0;
-    for r in row + 1..puzzle.len() {
+    for p_row in puzzle.iter().skip(row + 1) {
         right += 1;
-        if puzzle[r][col] >= target {
+        if p_row[col] >= target {
             break;
         }
     }
