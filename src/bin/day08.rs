@@ -37,7 +37,7 @@ fn is_visible(puzzle: &Vec<Vec<u8>>, row: usize, col: usize) -> bool {
     }
 
     visible = true;
-    for p_row in puzzle.iter().skip(row+1) {
+    for p_row in puzzle.iter().skip(row + 1) {
         if p_row[col] >= target {
             visible = false;
         }
